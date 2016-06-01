@@ -27,6 +27,8 @@ gem 'bcrypt', '~> 3.1.7'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
+gem 'nokogiri'
+
 
 group :development, :test do
   gem 'interactive_editor'
@@ -34,4 +36,5 @@ group :development, :test do
   gem 'hirb'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'byebug'
 end

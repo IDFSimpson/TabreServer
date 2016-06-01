@@ -1,3 +1,6 @@
+require 'nokogiri'
+require 'open-uri'
+
 class Api::V1::BookmarksController < ApplicationController
   before_action :set_bookmark, only: [:show, :update, :destroy]
 
@@ -19,6 +22,11 @@ class Api::V1::BookmarksController < ApplicationController
   # POST /bookmarks.json
   def create
     @bookmark = Bookmark.new(bookmark_params)
+    @scraped = Nokogiri::HTML(open(@bookmark.url))
+    @bookmark.scraped_content = ''
+    @scraped.css('h1,h2,h3,h4,h5,h6,a,p').each do |html_elem|
+      @bookmark.scraped_content += html_elem.text()
+    end
 
     if @bookmark.save
       render json: @bookmark, status: :created, location: @bookmark
@@ -54,7 +62,7 @@ class Api::V1::BookmarksController < ApplicationController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:url, :name, :scraped_content, :references)
+    params.require(:bookmark).permit(:url, :name)
   end
 
 end
