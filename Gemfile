@@ -27,7 +27,7 @@ gem 'bcrypt', '~> 3.1.7'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem 'nokogiri'
+gem 'ruby-readability'
 
 
 group :development, :test do

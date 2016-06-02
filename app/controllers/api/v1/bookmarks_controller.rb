@@ -22,14 +22,11 @@ class Api::V1::BookmarksController < ApplicationController
   # POST /bookmarks.json
   def create
     @bookmark = Bookmark.new(bookmark_params)
-    @scraped = Nokogiri::HTML(open(@bookmark.url))
-    @bookmark.scraped_content = ''
-    @scraped.css('h1,h2,h3,h4,h5,h6,a,p').each do |html_elem|
-      @bookmark.scraped_content += html_elem.text()
-    end
+    source = open(@bookmark.url).read
+    @bookmark.scraped_content = Readability::Document.new(source).content
 
     if @bookmark.save
-      render json: @bookmark, status: :created, location: @bookmark
+      render json: @bookmark, status: :created
     else
       render json: @bookmark.errors, status: :unprocessable_entity
     end
@@ -39,6 +36,8 @@ class Api::V1::BookmarksController < ApplicationController
   # PATCH/PUT /bookmarks/1.json
   def update
     @bookmark = Bookmark.find(params[:id])
+    source = open(@bookmark.url).read
+    @bookmark.scraped_content = Readability::Document.new(source).content
 
     if @bookmark.update(bookmark_params)
       head :no_content
