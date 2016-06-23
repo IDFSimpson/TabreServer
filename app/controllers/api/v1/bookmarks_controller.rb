@@ -7,8 +7,7 @@ class Api::V1::BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    @bookmarks = Bookmark.all
-
+    @bookmarks = Bookmark.where('snooze_until IS NULL OR snooze_until <= ?', Date.today)
     render json: @bookmarks
   end
 
@@ -61,7 +60,7 @@ class Api::V1::BookmarksController < ApplicationController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:url, :name)
+    params.require(:bookmark).permit(:url, :name, :snooze_until)
   end
 
 end
