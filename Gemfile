@@ -29,6 +29,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'ruby-readability'
 
+gem 'rack-cors', require: 'rack/cors'
+
 
 group :development, :test do
   gem 'interactive_editor'
